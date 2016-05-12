@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 
-require_relative "../lib/discover"
+require_relative "../lib/testing_your_legacy/discover"
 
 describe StartingPoint::Discover do
 
