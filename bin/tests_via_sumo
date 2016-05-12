@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+puts "hello"
+require_relative "../lib/testing_your_legacy"
+require_relative "../lib/discover"
+require_relative "../lib/sumo_sum/sumo_sum"
+
+list = SumoSum::SumoSum.new()
+list.get_records
+discovers = TestingYourLegacy::Discover.new(list)
+
+discovers.each do |r|
+  puts discovers.generate_test(r)
+end
+
