@@ -1,3 +1,3 @@
 module TestingYourLegacy
-  LogEntry=Struct.new(:url,:method,:visits)
+  LogEntry=Struct.new(:url,:protocol,:visits)
 end

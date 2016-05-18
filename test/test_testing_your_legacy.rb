@@ -2,7 +2,7 @@ require 'minitest/autorun'
 
 require_relative "../lib/testing_your_legacy/discover"
 
-describe StartingPoint::Discover do
+describe TestingYourLegacy::Discover do
 
   it "can get local repository status" do
     one = {method: 'POST',
@@ -12,7 +12,7 @@ describe StartingPoint::Discover do
            link: 'link/two',
            visits: 5}
     log_stub = [ one, two]
-    logs = StartingPoint::Discover.new(log_stub)
+    logs = TestingYourLegacy::Discover.new(log_stub)
     #logs.top_links.class.must_equal(Sumo::Search)
     logs.each { |line|
       p line

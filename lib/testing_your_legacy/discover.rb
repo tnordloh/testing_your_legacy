@@ -8,16 +8,24 @@ module TestingYourLegacy
 
     def each
       @logs.each do |record| 
-        puts generate_test(record)
         yield record
       end 
     end
 
-    def generate_test(record)
+    def generate_method(record)
       "test \"visit #{record[:url]}\" do\n" +
-      "  #{record[:method].downcase} #{record[:url]}\n"  +
+      "  #this url was visited #{record[:visits]} times\n" +
+      "  #{record[:protocol].downcase} #{record[:url]}\n"  +
       "  assert_response :success\n" +
-      "end"
+      "end\n" 
+    end
+
+    def generate_test(record)
+      "def \"#{record[:url].gsub("/","_")}\"\n" +
+      "  #this url was visited #{record[:visits]} times\n" +
+      "  #{record[:protocol].downcase} #{record[:url]}\n"  +
+      "  assert_response :success\n" +
+      "end\n"
     end
 
   end
