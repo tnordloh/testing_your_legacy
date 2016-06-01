@@ -1,4 +1,5 @@
 test "visit <%= @record[:url] %>" do
+  skip
   #this url was visited <%= @record[:visits] %>
   <%= @record[:protocol].downcase %> <%= @record[:url] %>
   assert_response :success
