@@ -31,12 +31,14 @@ All of the tests are initially set to 'skip', so that you can enable them one at
 
 Example 1:  Base url test
 
+```ruby
 test "visit /" do
   skip
   #this url was visited 1647 times
   get '/'
   assert_response :success
 end
+```
 
 After uncommenting the 'skip', and running 'rake test', you might see something like:
   1) Failure:
@@ -47,6 +49,7 @@ You can then go to the production site, and take a look for yourself, to see if 
 
 After the test is cleaned up, it may look more like this:
 
+```ruby
 test "visit home url, ensure it redirects to login" do
   skip
   #this url was visited 1647 times
@@ -54,6 +57,7 @@ test "visit home url, ensure it redirects to login" do
   assert_response :redirect 
   assert_template :index
 end
+```
 
 Once you have this one test perfected, you will have the most visited part of the site tested, and you can move to the next test.  
 
