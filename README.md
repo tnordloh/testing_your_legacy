@@ -45,6 +45,8 @@ After uncommenting the 'skip', and running 'rake test', you might see something 
 
 You can then go to the production site, and take a look for yourself, to see if this visit always results in a redirect, and modify the test accordingly.  Also, you can look at the content of the page, and modify this test to be aware of that content, perhaps by adding an 'assert_content :index', or whatever is appropriate.  And you might decide that the name itself is misleading, and decide to change that.
 
+After the test is cleaned up, it may look more like this:
+
 test "visit home url, ensure it redirects to login" do
   skip
   #this url was visited 1647 times
@@ -56,8 +58,6 @@ end
 Once you have this one test perfected, you will have the most visited part of the site tested, and you can move to the next test.  
 
 ## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
