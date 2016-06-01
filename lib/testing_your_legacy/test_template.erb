@@ -1,6 +1,5 @@
-def <%= @record[:url].gsub("/","_") %>
-  #this url was visited <%= @record[:visits] %> times
+test "visit <%= @record[:url] %>" do
+  #this url was visited <%= @record[:visits] %>
   <%= @record[:protocol].downcase %> <%= @record[:url] %>
   assert_response :success
 end
-
