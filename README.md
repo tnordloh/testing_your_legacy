@@ -29,7 +29,7 @@ After reading in log files with Sumo, you can run the sumo_sum script.  It will 
 All of the tests are initially set to 'skip', so that you can enable them one at a time. Start at the first test, which is the most-visited link, and try to run it.  It may need to have some prerequisites filled in; for example, perhaps it requires that the user be logged in, which may require you to create a relevant fixture, and ensure that a login url is called first.
 
 
-Example 1:  Base url test
+#### Example 1:  Base url test
 
 ```ruby
 test "visit /" do
