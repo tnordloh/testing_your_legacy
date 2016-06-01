@@ -1,4 +1,4 @@
-TOP_CLASSES='_sourceCategory=lloyds_liens started |' +
+TOP_CLASSES='_sourceCategory=* started |' +
   ' parse regex "\s(?<protocol>.+)\s\"(?<pre>/.*)\" "|' +
   'where !(pre matches  "*png*")|' +
   'where !(pre matches "*/assets*")|' +
@@ -14,5 +14,10 @@ TOP_CLASSES='_sourceCategory=lloyds_liens started |' +
   'replace(method,"4","0") as method |' +
   'replace(method,"3","0") as method |' +
   'replace(method,"2","0") as method |' +
-  'replace(method,"1","0") as method |' + 
+  'replace(method,"1","0") as method |' +
+  'replace(method,"00000","0") as method |' + 
+  'replace(method,"0000","0") as method |' + 
+  'replace(method,"000","0") as method |' + 
+  'replace(method,"00","0") as method |' + 
+  'replace(method,"0",":id") as method |' + 
   'count_frequent class,method,protocol'

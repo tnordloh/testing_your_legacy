@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in image_magick.gemspec
-gem 'sumo-search'
+# Specify your gem's dependencies in your_legacy_tests.gemspec
+gemspec
 

@@ -1,13 +1,7 @@
 #!/usr/bin/env ruby
 
 puts "hello"
-require_relative "../lib/testing_your_legacy/discover"
-require_relative "../lib/sumo_sum/sumo_sum"
+require_relative "../lib/sumo_sum"
 
-list = SumoSum::SumoSum.new()
-discovers = TestingYourLegacy::Discover.new(list)
-
-discovers.each do |r|
-  puts discovers.generate_method(r) + "\n"
-end
+SumoSum.process
 

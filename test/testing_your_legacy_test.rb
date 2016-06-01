@@ -5,19 +5,34 @@ require_relative "../lib/testing_your_legacy/discover"
 describe TestingYourLegacy::Discover do
 
   it "can get local repository status" do
-    one = {method: 'POST',
-           link: 'link/to',
+    one = {protocol: 'POST',
+           url: 'link/to',
            visits: 6}
-    two = {method: 'GET',
-           link: 'link/two',
+    two = {protocol: 'GET',
+           url: 'link/two',
            visits: 5}
     log_stub = [ one, two]
     logs = TestingYourLegacy::Discover.new(log_stub)
     #logs.top_links.class.must_equal(Sumo::Search)
     logs.each { |line|
-      p line
+      line[:protocol].class.must_equal(String)
     } 
-   # puts logs.top_visits.first
+  end
+
+  it "can print a test from the template" do
+    logs = TestingYourLegacy::Discover.new(nil)
+    one = {protocol: 'POST',
+           url: 'link/to',
+           visits: 6}
+    logs.generate_test(one).class.must_equal(String)
+  end
+
+  it "can print a method from the template" do
+    logs = TestingYourLegacy::Discover.new(nil)
+    one = {protocol: 'POST',
+           url: 'link/to',
+           visits: 6}
+    logs.generate_method(one).class.must_equal(String)
   end
 
 end
