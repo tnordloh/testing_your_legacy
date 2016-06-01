@@ -26,7 +26,7 @@ Currently, this gem requires an active account with sumologic, and that you read
 
 After reading in log files with Sumo, you can run the sumo_sum script.  It will prompt you to fill in the ~/.sumo_creds file, with your credentials, if you haven't already.  Otherwise, it should parse your sumo account, and return a list of tests to your command line, which you can pipe into a test file of your choise.
 
-They won't be ready for use at this point.  All of the tests are set to 'skip'. You can now start at the first test, which is the most-visited link, and try to run it.  It may need to have some prerequisites filled in; for example, perhaps it requires that the user be logged in, which may require you to create a relevant fixture, and ensure that a login url is called first.
+All of the tests are initially set to 'skip', so that you can enable them one at a time. Start at the first test, which is the most-visited link, and try to run it.  It may need to have some prerequisites filled in; for example, perhaps it requires that the user be logged in, which may require you to create a relevant fixture, and ensure that a login url is called first.
 
 
 Example 1:  Base url test
