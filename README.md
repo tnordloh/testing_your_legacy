@@ -1,9 +1,5 @@
 # YourLegacyTests
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/your_legacy_tests`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
-
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -22,7 +18,38 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+This gem should be used by people who have inherited a legacy application which lacks any tests, but has been running in production for a while.  It uses Sumo Logic to find the most frequently used urls in an application, and then generates tests for those urls.
+
+After reading in log files with Sumo, you can run the sumo_sum script.  It will prompt you to fill in the ~/.sumo_creds file, with your credentials, if you haven't already.  Otherwise, it should parse your sumo account, and return a list of tests to your command line, which you can pipe into a test file of your chouse.
+
+They won't be ready for use at this point.  All of the tests are set to 'skip'. You can now start at the first test, which is the most-visited link, and try to run it.  It may need to have some prerequisites filled in; for example, perhaps it requires that the user be logged in, which may require you to create a relevant fixture, and ensure that a login url is called first.
+
+
+Example 1:  Base url test
+
+test "visit /" do
+  skip
+  #this url was visited 1647 times
+  get '/'
+  assert_response :success
+end
+
+After uncommenting the 'skip', and running 'rake test', you might see something like:
+  1) Failure:
+  UserStoriesTest#test_visit_/ [/my_app/test/integration/user_stories_test.rb:96]:
+  Expected response to be a <success>, but was <302>
+
+You can then go to the production site, and take a look for yourself, to see if this visit always results in a redirect, and modify the test accordingly.  Also, you can look at the content of the page, and modify this test to be aware of that content, perhaps by adding an 'assert_content :index', or whatever is appropriate.  And you might decide that the name itself is misleading, and decide to change that.
+
+test "visit home url, ensure it redirects to login" do
+  skip
+  #this url was visited 1647 times
+  get '/'
+  assert_response :redirect 
+  assert_template :index
+end
+
+Once you have this one test perfected, you will have the most visited part of the site tested, and you can move to the next test.  
 
 ## Development
 
@@ -32,7 +59,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/your_legacy_tests. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/tnordloh/your_legacy_tests. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
 
 
 ## License
