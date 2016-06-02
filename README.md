@@ -125,7 +125,7 @@ and create our entry
 ```
 good888:
   login: good888
-  password: 1a91d62f7ca67399625a4368a6ab5d4a3baa6073
+  password: <%= Digest::SHA1.hexdigest("pw") %>
   physician_name: good
   email: good@email.com
   expires_at: <%= (Date.today + 5.days).to_s(:db) %> 
