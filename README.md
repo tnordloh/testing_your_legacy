@@ -20,7 +20,7 @@ Or install it yourself as:
 
 This gem should be used by people who have inherited a legacy application which lacks any tests, but has been running in production for a while.  It uses Sumo Logic to find the most frequently used urls in an application, and then generates tests for those urls.
 
-### prerequisites
+### Prerequisites
 
 Currently, this gem requires an active account with sumologic, and that you read your logfiles into sumologic.  It then uses their api to aggregate the results, and create tests, based on frequency.
 
@@ -29,7 +29,7 @@ After reading in log files with Sumo, you can run the sumo_sum script.  It will 
 All of the tests are initially set to 'skip', so that you can enable them one at a time. Start at the first test, which is the most-visited link, and try to run it.  It may need to have some prerequisites filled in; for example, perhaps it requires that the user be logged in, which may require you to create a relevant fixture, and ensure that a login url is called first.
 
 
-#### EXAMPLES
+#### Examples
 Fair warning; these examples assume no real knowledge on building tests, other than the ability to run the 'rake test' command.  This is mostly written as the reference I wish I had access to, when I tried to figure out how to test my legacy application, so experts may want to just skim the examples, when my lecture mode kicks in.
 #### Example 1:  Base url test
 
