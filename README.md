@@ -43,9 +43,11 @@ end
 ```
 
 After uncommenting the `skip`, and running `rake test`, you might see something like:
+```
   1) Failure:
   UserStoriesTest#test_visit_/ [/my_app/test/integration/user_stories_test.rb:96]:
   Expected response to be a <success>, but was <302>
+```
 
 You can then go to the production site, and take a look for yourself, to see if this visit always results in a redirect, and modify the test accordingly.  Also, you can look at the content of the page, and modify this test to be aware of that content, perhaps by adding an `assert_content :index`, or whatever is appropriate.  And you might decide that the name itself is misleading, and decide to change that.
 
