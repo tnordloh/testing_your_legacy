@@ -64,6 +64,8 @@ Once you have this one test perfected, you will have the most visited part of th
 #### Example 2: url requiring a login
 Wow, that was easy, wasn't it?  Unfortunately, building tests on a legacy application is rarely a simple matter, and you may have to go prospecting deep into the application to make a test work.  Just remember, we are leveraging logfiles to make sure that the tests we write give us the most bang for the buck possible.
 
+I'm going to break down building a specific test, on something that requires a little more work.  As we build this test out, I'm going to break out reusable chunks as I go, which I can use later on, in future tests.
+
 Say this test, as generated, doesn't work:
 ```ruby
 test "visit /user/profile/:id" do
@@ -77,6 +79,8 @@ end
 after taking a look in app/views/user/profile.erb, looking at ./app/controllers/user, examining the model, and logging in to the website to browse this url, you determine that you need the following things to make this test work:
 1. The ability to login before running this test
 2. To treat this like a 'real' application, you want to visit the login page.
+
+At this point you might be tempted to go write model tests instead.  If so, go for it.  These tests are meant as a stopgap, and as a hint on what needs testing, so if you're inspired to knock out the model tests on the User, go for it.
 
 This is the toughest part of starting to write tests, so it's good to break it down.  Also, these tests are all meant to be thrown away, so I like them to be able to stand on their own.
 
@@ -104,25 +108,73 @@ end
 
 so, now we need to have the ability to login, which we'll probably use a lot.  So we should make a private method called 'login', as well as create the relevant fixture data.  Looking at the application, we see that we will be working in the Users model and will need, and at a minimum, username at least 7 characters long, a password, and a 'valid' email, as well as a date that is in the future, for the 'expires_at' value.  The fixtures directory is also empty, so we create an entry in there like so, in the tests/fixtures/users.yml file:
 
+We also see that the login is done with a 'post' to '/user/login', and requires a JSON object that looks like 
+
+    user: { login: login , password: p }
+
 We also know, that the database only contains hashed passwords, so we dig into the User model, and find this line in the password file:
 Digest::SHA1.hexdigest(password)
 
-Well, we are going to have to look at that later, because whoever wrote this app should be shot for not using a seed, but right now, let's get that hashed password created:
+Well, we are going to have to look at that later, because that password generation might not be secure, but right now, let's get that hashed password created:
 a rails console prompt, we can run:
 
     irb(main):002:0> Digest::SHA1.hexdigest("pw")
     => "1a91d62f7ca67399625a4368a6ab5d4a3baa6073"
 
+and create our entry
 ```
 good888:
   login: good888
   password: 1a91d62f7ca67399625a4368a6ab5d4a3baa6073
   physician_name: good
   email: good@email.com
+  expires_at: <%= (Date.today + 5.days).to_s(:db) %> 
 ```
 
+So, now we can try to make our test work.  We should break the login functionality out, but for now, let's just give this a shot as-is.  To simplify things, we'll just do the 'login' portion, so that we just test one thing at a time.
 
-At this point you might be tempted to go write model tests instead.  If so, go for it.  These tests are meant as a stopgap, and as a hint on what needs testing, so if you're inspired to knock out the model tests on the User, go for it.
+```ruby
+test "visit /user/profile/:id" do
+  visit_home
+  post '/user/login', user: { login: 'admin888' , password: 'pw' }
+  follow_redirect!
+  assert_response :success
+  assert_equal '/', path
+  get '/user/profile/#{users(:good888).id}'
+  assert_response :success
+end
+```
+
+We run it, it seems to work.  But this test probably should validate that we have a link to the profile, before it does the 'get' on that url. We'll add this line, and test again:
+
+    assert_select 'a[href=?]', "/user/profile/#{users(:good888).id}", {count: 1}¬
+
+Then do a little refactoring, break login into it's own method, and finalize this test:
+
+Login method:
+```ruby
+def login(login, p)
+  post '/user/login', user: { login: login , password: p }
+  follow_redirect!
+  assert_response :success
+  assert_equal '/', path
+end
+```
+
+**As you go, think about the bigger picture.  The 'login' method could be useful in many places.  If you find yourself needing it elsewhere, push it up into 'test/test_helper.rb', to make it available in other tests, such as model and controller tests.**
+
+cleaned up test:
+```ruby
+test "login, make sure user profile link is available, and that we can visit it" do
+  visit_home
+  login('good888','pw')
+  user_id=users(:good888).id
+  assert_select 'a[href=?]', "/user/profile/#{user_id.to_s}", {count: 1}¬
+  get '/user/profile/#{user_id}'
+  assert_response :success
+end
+```
+
 ## Development
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
