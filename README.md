@@ -140,7 +140,7 @@ test "visit /user/profile/:id" do
   follow_redirect!
   assert_response :success
   assert_equal '/', path
-  get '/user/profile/#{users(:good888).id}'
+  get "/user/profile/#{users(:good888).id}"
   assert_response :success
 end
 ```
@@ -168,9 +168,9 @@ cleaned up test:
 test "login, make sure user profile link is available, and that we can visit it" do
   visit_home
   login('good888','pw')
-  user_id=users(:good888).id
-  assert_select 'a[href=?]', "/user/profile/#{user_id.to_s}", {count: 1}¬
-  get '/user/profile/#{user_id}'
+  user_id=users(:good888).id.to_s
+  assert_select 'a[href=?]', "/user/profile/#{user_id}", {count: 1}¬
+  get "/user/profile/#{user_id}"
   assert_response :success
 end
 ```
