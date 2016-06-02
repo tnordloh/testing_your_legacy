@@ -64,7 +64,7 @@ end
 Once you have this one test perfected, you will have the most visited part of the site tested, and you can move to the next test.  
 
 #### Example 2: url requiring a login
-Wow, that was easy, wasn't it?  Unfortunately, building tests on a legacy application is rarely a simple matter, and you may have to go prospecting deep into the application to make a test work.  Just remember, we are leveraging logfiles to make sure that the tests we write give us the most bang for the buck possible.
+Wow, that was easy, wasn't it?  Unfortunately, building tests on a legacy application is rarely a simple matter, and you may have to go prospecting deep into the application to make a test work.  Just remember, we are leveraging logfiles to make sure that the tests we write give us the most bang for the buck possible.  Once you've done these tests,
 
 I'm going to break down building a specific test, on something that requires a little more work.  As we build this test out, I'm going to break out reusable chunks as I go, which I can use later on, in future tests.
 
@@ -78,15 +78,13 @@ test "visit /user/profile/:id" do
 end
 ```
 
-after taking a look in app/views/user/profile.erb, looking at ./app/controllers/user, examining the model, and logging in to the website to browse this url, you determine that you need the following things to make this test work:
+after taking a look in `app/views/users/profile.erb`, looking at `/app/controllers/user_controller.rb`, examining the model, and logging in to the website to browse this url, you determine that you need the following things to make this test work:
 1. The ability to login before running this test
 2. To treat this like a 'real' application, you want to visit the login page.
 
 At this point you might be tempted to go write model tests instead.  If so, go for it.  These tests are meant as a stopgap, and as a hint on what needs testing, so if you're inspired to knock out the model tests on the User, go for it.
 
-This is the toughest part of starting to write tests, so it's good to break it down.  Also, these tests are all meant to be thrown away, so I like them to be able to stand on their own.
-
-Step two feels easier to me, so let's start with that.  We'll be turning the test from example one into a private method called 'visit_home', so we can call it at will.  
+Step two feels easier to , so let's start with that.  We'll be turning the test from example one into a private method called 'visit_home', so we can call it at will.  
 
 ```ruby
 private
