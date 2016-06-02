@@ -49,7 +49,7 @@ After uncommenting the `skip`, and running `rake test`, you might see something 
   Expected response to be a <success>, but was <302>
 ```
 
-You can then go to the production site, and take a look for yourself, to see if this visit always results in a redirect, and modify the test accordingly.  Also, you can look at the content of the page, and modify this test to be aware of that content, perhaps by adding an `assert_content :index`, or whatever is appropriate.  And you might decide that the name itself is misleading, and decide to change that.
+You can then go to the production site, and take a look for yourself, to see if this visit always results in a redirect, and modify the test accordingly.  Also, you can look at the content of the page, and modify this test to be aware of that content, perhaps by adding an `assert_content :index`, or whatever is appropriate.  Also, the auto-generated name is a placeholder; rename it, once you understand the context.
 
 After the test is cleaned up, it may look more like this:
 
