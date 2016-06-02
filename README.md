@@ -113,13 +113,13 @@ a rails console prompt, we can run:
     irb(main):002:0> Digest::SHA1.hexdigest("pw")
     => "1a91d62f7ca67399625a4368a6ab5d4a3baa6073"
 
-
+```
 good888:
   login: good888
   password: 1a91d62f7ca67399625a4368a6ab5d4a3baa6073
   physician_name: good
   email: good@email.com
-
+```
 
 
 At this point you might be tempted to go write model tests instead.  If so, go for it.  These tests are meant as a stopgap, and as a hint on what needs testing, so if you're inspired to knock out the model tests on the User, go for it.
