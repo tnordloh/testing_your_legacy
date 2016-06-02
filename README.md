@@ -96,7 +96,7 @@ def visit_home
 end
 ```
 
-then change our old test to match, so we can see that visit_home works correctly.  Tests testing tests, cats and dogs living together, mass hysteria!  But hey, it lets us call 'visit_home' whenever we want.
+then change our old test to match, so we can see that visit_home works correctly.  Tests testing tests, cats and dogs living together, mass hysteria!  But hey, it lets us call 'visit_home', and have confidence that it works, before we embed it in another test.
 
 rewritten test from example 1:
 
@@ -106,7 +106,7 @@ test "visit home url, ensure it redirects to index" do
 end
 ```
 
-so, now we need to have the ability to login, which we'll probably use a lot.  So we should make a private method called 'login', as well as create the relevant fixture data.  Looking at the application, we see that we will be working in the Users model and will need, and at a minimum, username at least 7 characters long, a password, and a 'valid' email, as well as a date that is in the future, for the 'expires_at' value.  The fixtures directory is also empty, so we create an entry in there like so, in the tests/fixtures/users.yml file:
+so, now we need to have the ability to login, which we'll probably use a lot.  So we should make a private method called 'login', as well as create the relevant fixture data.  Looking at the application, we see that we will be working in the Users model and will need, at a minimum, a username at least 7 characters long, a password, a valid email, and a date that is in the future, for the 'expires_at' value.
 
 We also see that the login is done with a 'post' to '/user/login', and requires a JSON object that looks like 
 
@@ -116,12 +116,12 @@ We also know, that the database only contains hashed passwords, so we dig into t
 Digest::SHA1.hexdigest(password)
 
 Well, we are going to have to look at that later, because that password generation might not be secure, but right now, let's get that hashed password created:
-a rails console prompt, we can run:
+at a rails console prompt, we can run:
 
     irb(main):002:0> Digest::SHA1.hexdigest("pw")
     => "1a91d62f7ca67399625a4368a6ab5d4a3baa6073"
 
-and create our entry
+and create our entry:
 ```
 good888:
   login: good888
@@ -131,7 +131,7 @@ good888:
   expires_at: <%= (Date.today + 5.days).to_s(:db) %> 
 ```
 
-So, now we can try to make our test work.  We should break the login functionality out, but for now, let's just give this a shot as-is.  To simplify things, we'll just do the 'login' portion, so that we just test one thing at a time.
+So, now we can try to make our test work.  We should break the login functionality out, but for now, let's just give this a shot as-is.  To simplify things, we'll just do the 'login' portion:
 
 ```ruby
 test "visit /user/profile/:id" do
@@ -147,11 +147,11 @@ end
 
 We run it, it seems to work.  But this test probably should validate that we have a link to the profile, before it does the 'get' on that url. We'll add this line, and test again:
 
-    assert_select 'a[href=?]', "/user/profile/#{users(:good888).id}", {count: 1}¬
+    assert_select 'a[href=?]', "/user/profile/#{users(:good888).id}", {count: 1}
 
 Then do a little refactoring, break login into it's own method, and finalize this test:
 
-Login method:
+private login method:
 ```ruby
 def login(login, p)
   post '/user/login', user: { login: login , password: p }
@@ -161,7 +161,7 @@ def login(login, p)
 end
 ```
 
-**As you go, think about the bigger picture.  The 'login' method could be useful in many places.  If you find yourself needing it elsewhere, push it up into 'test/test_helper.rb', to make it available in other tests, such as model and controller tests.**
+**The 'login' method could be useful in many places.  If you find yourself needing it elsewhere, push it up into 'test/test_helper.rb', to make it available in your model/view/controller tests.**
 
 cleaned up test:
 ```ruby
