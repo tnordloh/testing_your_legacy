@@ -52,9 +52,7 @@ You can then go to the production site, and take a look for yourself, to see if 
 After the test is cleaned up, it may look more like this:
 
 ```ruby
-test "visit home url, ensure it redirects to login" do
-  skip
-  #this url was visited 1647 times
+test "visit home url, ensure it redirects to index" do
   get '/'
   assert_response :redirect 
   assert_template :index
@@ -82,9 +80,49 @@ after taking a look in app/views/user/profile.erb, looking at ./app/controllers/
 
 This is the toughest part of starting to write tests, so it's good to break it down.  Also, these tests are all meant to be thrown away, so I like them to be able to stand on their own.
 
-Step one actually r
+Step two feels easier to me, so let's start with that.  We'll be turning the test from example one into a private method called 'visit_home', so we can call it at will.  
+
+```ruby
+private
+
+def visit_home
+  get_via_redirect '/'
+  assert_response :success
+  assert_template :index
+end
+```
+
+then change our old test to match, so we can see that visit_home works correctly.  Tests testing tests, cats and dogs living together, mass hysteria!  But hey, it lets us call 'visit_home' whenever we want.
+
+rewritten test from example 1:
+
+```ruby
+test "visit home url, ensure it redirects to index" do
+  visit_home
+end
+```
+
+so, now we need to have the ability to login, which we'll probably use a lot.  So we should make a private method called 'login', as well as create the relevant fixture data.  Looking at the application, we see that we will be working in the Users model and will need, and at a minimum, username at least 7 characters long, a password, and a 'valid' email, as well as a date that is in the future, for the 'expires_at' value.  The fixtures directory is also empty, so we create an entry in there like so, in the tests/fixtures/users.yml file:
+
+We also know, that the database only contains hashed passwords, so we dig into the User model, and find this line in the password file:
+Digest::SHA1.hexdigest(password)
+
+Well, we are going to have to look at that later, because whoever wrote this app should be shot for not using a seed, but right now, let's get that hashed password created:
+a rails console prompt, we can run:
+
+    irb(main):002:0> Digest::SHA1.hexdigest("pw")
+    => "1a91d62f7ca67399625a4368a6ab5d4a3baa6073"
 
 
+good888:
+  login: good888
+  password: 1a91d62f7ca67399625a4368a6ab5d4a3baa6073
+  physician_name: good
+  email: good@email.com
+
+
+
+At this point you might be tempted to go write model tests instead.  If so, go for it.  These tests are meant as a stopgap, and as a hint on what needs testing, so if you're inspired to knock out the model tests on the User, go for it.
 ## Development
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
