@@ -29,6 +29,8 @@ After reading in log files with Sumo, you can run the sumo_sum script.  It will 
 All of the tests are initially set to 'skip', so that you can enable them one at a time. Start at the first test, which is the most-visited link, and try to run it.  It may need to have some prerequisites filled in; for example, perhaps it requires that the user be logged in, which may require you to create a relevant fixture, and ensure that a login url is called first.
 
 
+#### EXAMPLES
+Fair warning; these examples assume no real knowledge on building tests, other than the ability to run the 'rake test' command.  This is mostly written as the reference I wish I had access to, when I tried to figure out how to test my legacy application, so experts may want to just skim the examples, when my lecture mode kicks in.
 #### Example 1:  Base url test
 
 ```ruby
@@ -60,6 +62,28 @@ end
 ```
 
 Once you have this one test perfected, you will have the most visited part of the site tested, and you can move to the next test.  
+
+#### Example 2: url requiring a login
+Wow, that was easy, wasn't it?  Unfortunately, building tests on a legacy application is rarely a simple matter, and you may have to go prospecting deep into the application to make a test work.  Just remember, we are leveraging logfiles to make sure that the tests we write give us the most bang for the buck possible.
+
+Say this test, as generated, doesn't work:
+```ruby
+test "visit /user/profile/:id" do
+  skip
+  #this url was visited 424 times
+  get '/user/profile/:id'
+  assert_response :success
+end
+```
+
+after taking a look in app/views/user/profile.erb, looking at ./app/controllers/user, examining the model, and logging in to the website to browse this url, you determine that you need the following things to make this test work:
+1. The ability to login before running this test
+2. To treat this like a 'real' application, you want to visit the login page.
+
+This is the toughest part of starting to write tests, so it's good to break it down.  Also, these tests are all meant to be thrown away, so I like them to be able to stand on their own.
+
+Step one actually r
+
 
 ## Development
 
