@@ -21,6 +21,17 @@ Or install it yourself as:
 
 This gem should be used by people who have inherited a legacy application which lacks any tests, but has been running in production for a while.  It uses Sumo Logic to find the most frequently used urls in an application, and then generates tests for those urls.
 
+To run, execute the command:
+
+`tests_via_sumo [-c or --count <count>] [-s or --source_category <category>]`
+
+source_category defaults to a * .
+
+Count defaults to 25, and controls the number of tests generated.
+
+Results are generated on stdout, for maximum flexibility on where the tests are placed in the Rails application.
+
+
 ## Caveats
 
 Since Sumo Logic is nice enough to process logs for free, for smaller users, I'm releasing this gem with heavy dependence on Sumo's query function, for now.  I plan on adding hooks to allow it to be more useful for processing logfiles without relying on Sumo for summing up the number of visits per page, ordering them from greatest to smallest, and parsing data out of the logfiles.
@@ -35,21 +46,16 @@ All of the tests are initially set to `skip`, so that you can enable them one at
 
 
 #### Examples
-These examples assume no real knowledge on building tests, other than the ability to run the `rake test` command.  This is mostly written as the reference I wish I had access to, when I tried to figure out how to test my legacy application, so experts may want to just skim the examples.
 
-To run, execute the command:
+These examples assume no real knowledge on building tests, other than the ability to run the `rake test` command; it is a summary of the things I wish I knew, when I tried to figure out how to test my legacy application, so if you are already familiar with writing tests, you may want to just skim this section.
 
-`tests_via_sumo [-c or --count <count>] [-s or --source_category <category>]`
 
-source_category defaults to a * .
-
-Count defaults to 25, and controls the number of tests generated.
-
-Results are generated on stdout, for maximum flexibility on where the tests are placed in the Rails application.
-
-Here are some examples on how to modify the generated templates, for your application.
 
 #### Example 1:  Base url test
+
+I took the output from `tests_via_sumo`, and appended them to the `./test/integration/user_stories_test.rb` file.
+
+Modifying the auto-generated test to work for you:
 
 ```ruby
 test "visit /" do
@@ -83,14 +89,14 @@ end
 
 Once you have this one test perfected, you will have the most visited part of the site tested, and you can move to the next test.  
 
-#### Example 2: url requiring a login
-Wow, that was easy, wasn't it?  Unfortunately, building tests on a legacy application is rarely a simple matter, and you may have to go prospecting deep into the application to make a test work.  Hopefully, using logs as a guide will help to create the most informative, useful tests first.
 
-Also, while these first few tests are very hard to build, doing so provides an opportunity to figure out everything needed to set up many other tests.  The hope is that, going through this process will provide tools that can be leveraged throughout the application, to simplify the process of building tests in the future.
+Wow, that was easy, wasn't it?  Unfortunately, building tests on a legacy application is rarely a simple matter, and you may have to go prospecting deep into the application to make a test work.  Hopefully, using logs as a guide will help to create the most informative, useful tests first, and give us an idea of what setup requirements we will need for many other tests.
 
-I'm going to break down building a specific test, on something that requires a little more work.  As we build this test out, I'm going to break out  setup code into methods, which I can hopefully use in many other tests.
+#### Example 2: Url requiring a login
 
-Say this test, as generated, doesn't work:
+This example walks through the process of building a test with several setup requirements. I'm going to break the setup into separate methods, which I can hopefully be reused other tests.
+
+This test, as generated, doesn't work:
 ```ruby
 test "visit /user/profile/:id" do
   skip
@@ -100,7 +106,7 @@ test "visit /user/profile/:id" do
 end
 ```
 
-after taking a look in `app/views/users/profile.erb`, looking at `/app/controllers/user_controller.rb`, examining the model, and logging in to the website to browse this url, we find these prerequisites:
+after taking a look in `app/views/users/profile.erb`, looking at `/app/controllers/user_controller.rb`, examining the User model, and logging in to the website to browse this url, we find these setup requirements:
 1. The ability to login before running this test
 2. The link to this page is found on root page, which is what the first test covers. For consistency, we want to verify that the root page has this link.
 
@@ -126,19 +132,22 @@ test "visit home url, ensure it redirects to index" do
 end
 ```
 
-so, now we need to have the ability to login, which is going to be important for many other tests.  We need a private method called 'login', as well as the relevant fixture data.  Looking at the application, we see that we will be working in the Users model and will need, at a minimum, a username at least 7 characters long, a password, a valid email, and a date that is in the future, for the 'expires_at' value.
+Note that these tests are a stopgap.  Some of them might turn out to be useful, but many of them will be too brittle for the long term.  But they can provide a bridge that allows you to proceed with an upgrade, to preserve the current functionality of the site, and to exercise the site enough to generate deprecation warnings.
+
+Now for step 1.  We need a private method called 'login', as well as the relevant fixture data.  The Users model shows that our fixture needs to contain a username at least 7 characters long, a password, a valid email, and a date that is in the future, for the 'expires_at' value.
+
+The log reveals that logging in is executed as a `post` to `/user/login`, which passes this data: 
+
+    `user: { login: <login> , password: <p> }`
 
 At this point, it might be more useful to divert from writing these tests, to writing tests for the Users model, or at least create a to-do item somewhere, noting that the users model should have tests that ensure we come back to testing the things we discovered.
 
-We also see that the login is done with a 'post' to '/user/login', and requires a JSON object that looks like: 
 
-    user: { login: <login> , password: <p> }
-
-We also know, that the database only contains hashed passwords, so we dig into the User model, and find this line in the password file:
+Additionally the database turns out to contain hashed passwords, so we dig into the User model, and find the command used to hash a password:
 Digest::SHA1.hexdigest(password)
 
 
-We now have enough information to create our fixture:
+We now have enough information to create our fixture, which looks like this:
 ```
 good888:
   login: good888
@@ -148,7 +157,7 @@ good888:
   expires_at: <%= (Date.today + 5.days).to_s(:db) %> 
 ```
 
-So, now we can try to make our test work.  We should put login in its own method, but for now, let's just give this a shot as-is.  To simplify things, we'll just do the 'login' portion of the test, to make sure that at least that much is working:
+So, now we can try to log in from our test.  We should put login in its own method, but for now, let's just give this a shot as-is:
 
 ```ruby
 test "visit /user/profile/:id" do
@@ -162,11 +171,11 @@ test "visit /user/profile/:id" do
 end
 ```
 
-We run it, it seems to work, so now we can test that the home page has a link to the profile page. We'll add this line, and test again:
+We run it, it seems to work, so now we can add this line, to check for the profile link on the home page:
 
     assert_select 'a[href=?]', "/user/profile/#{users(:good888).id}", {count: 1}
 
-Then do a little refactoring, break login into it's own method, and finalize this test:
+Then do a little refactoring, to break login into a reusable method, and finalize this test:
 
 private login method:
 ```ruby
@@ -191,10 +200,6 @@ test "login, make sure user profile link is available, and that we can visit it"
   assert_response :success
 end
 ```
-
-## Development
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 

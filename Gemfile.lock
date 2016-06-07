@@ -1,19 +1,22 @@
+PATH
+  remote: .
+  specs:
+    testing_your_legacy (0.1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
-    clamp (1.0.0)
-    excon (0.49.0)
-    json (1.8.3)
-    sumo-search (2.1.0)
-      clamp (>= 0.6.3)
-      excon (>= 0.32)
-      json
+    minitest (5.8.3)
+    rake (10.4.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  sumo-search
+  bundler (~> 1.10)
+  minitest
+  rake (~> 10.0)
+  testing_your_legacy!
 
 BUNDLED WITH
    1.10.6
