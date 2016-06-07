@@ -37,7 +37,7 @@ All of the tests are initially set to `skip`, so that you can enable them one at
 #### Examples
 Fair warning; these examples assume no real knowledge on building tests, other than the ability to run the `rake test` command.  This is mostly written as the reference I wish I had access to, when I tried to figure out how to test my legacy application, so experts may want to just skim the examples, when my lecture mode kicks in.
 
-To run, just execute the command 
+To run, execute the command:
 
 `tests_via_sumo [-c or --count <count>] [-s or --source_category <category>]`
 
