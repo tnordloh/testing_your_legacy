@@ -38,13 +38,11 @@ module SumoSum
     end
 
     def each
-      p top_visits.methods
-      p top_visits.class
-      top_visits.first(count).each do |record| 
-        yield TestingYourLegacy::LogEntry.new(get_link(record),        #comment
-                                              record["protocol"],      #comment
-                                              record["_approxcount"])  #comment
-      end 
+      top_visits.first(count).each do |record|
+        yield TestingYourLegacy::LogEntry.new(get_link(record),
+                                              record["protocol"],
+                                              record["_approxcount"])
+      end
     end
 
     def days_ago(days=90)
@@ -53,15 +51,14 @@ module SumoSum
     end
 
     def get_link(record)
-      "/" + 
-        ["class","method"].map do |field| 
+      "/" +
+        ["class","method"].map do |field|
         record[field]
         end
       .reject {|field|
         field==""
       }
       .join("/")
-      #record['class'] + "::" + record["method"]
     end
   end
 end

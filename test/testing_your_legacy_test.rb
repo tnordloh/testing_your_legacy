@@ -13,10 +13,9 @@ describe TestingYourLegacy::Discover do
            visits: 5}
     log_stub = [ one, two]
     logs = TestingYourLegacy::Discover.new(log_stub)
-    #logs.top_links.class.must_equal(Sumo::Search)
     logs.each { |line|
       line[:protocol].class.must_equal(String)
-    } 
+    }
   end
 
   it "can print a test from the template" do

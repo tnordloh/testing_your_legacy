@@ -8,9 +8,9 @@ module TestingYourLegacy
     end
 
     def each
-      @logs.each do |record| 
+      @logs.each do |record|
         yield record
-      end 
+      end
     end
 
     def generate_method(record)
