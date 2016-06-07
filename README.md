@@ -18,7 +18,12 @@ Or install it yourself as:
 
 ## Usage
 
+
 This gem should be used by people who have inherited a legacy application which lacks any tests, but has been running in production for a while.  It uses Sumo Logic to find the most frequently used urls in an application, and then generates tests for those urls.
+
+##caveats
+
+Since Sumo Logic is nice enough to process logs for free, for smaller users, I'm releasing this gem with heavy dependence on Sumo's query function, for now.  I plan on adding hooks to allow it to be more useful for processing logfiles without relying on Sumo, but for now, I'm letting Sumo handle a lot of the processing, such as summing up the number of visits per page, ordering them from greatest to smallest, and parsing data out of the logfiles.  So, now I can feel better about using their product, without paying for it, by providing a gem that works very well, as long as their log parser is doing the heavy lifting.
 
 ### Prerequisites
 
@@ -31,6 +36,11 @@ All of the tests are initially set to `skip`, so that you can enable them one at
 
 #### Examples
 Fair warning; these examples assume no real knowledge on building tests, other than the ability to run the `rake test` command.  This is mostly written as the reference I wish I had access to, when I tried to figure out how to test my legacy application, so experts may want to just skim the examples, when my lecture mode kicks in.
+
+To run, just execute the command 
+
+`tests_via_sumo [-c or --count <count>] [-s or --source_category <category>]`
+
 #### Example 1:  Base url test
 
 ```ruby
