@@ -41,7 +41,8 @@ To run, execute the command:
 
 `tests_via_sumo [-c or --count <count>] [-s or --source_category <category>]`
 
-source_category defaults to a `*` 
+source_category defaults to a `*` .
+
 count defaults to 25, and controls the number of tests generated.
 
 Results are generated on stdout, for maximum flexibility on where the tests are placed in the Rails application.
