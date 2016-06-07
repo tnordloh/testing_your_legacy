@@ -21,7 +21,7 @@ Or install it yourself as:
 
 This gem should be used by people who have inherited a legacy application which lacks any tests, but has been running in production for a while.  It uses Sumo Logic to find the most frequently used urls in an application, and then generates tests for those urls.
 
-##caveats
+## Caveats
 
 Since Sumo Logic is nice enough to process logs for free, for smaller users, I'm releasing this gem with heavy dependence on Sumo's query function, for now.  I plan on adding hooks to allow it to be more useful for processing logfiles without relying on Sumo for summing up the number of visits per page, ordering them from greatest to smallest, and parsing data out of the logfiles.
 
