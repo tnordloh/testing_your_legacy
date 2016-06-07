@@ -1,4 +1,4 @@
-TOP_CLASSES='_sourceCategory=* started |' +
+TOP_CLASSES=' started |' +
   ' parse regex "\s(?<protocol>.+)\s\"(?<pre>/.*)\" "|' +
   'where !(pre matches  "*png*")|' +
   'where !(pre matches "*/assets*")|' +

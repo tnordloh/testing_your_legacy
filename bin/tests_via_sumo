@@ -1,7 +1,49 @@
 #!/usr/bin/env ruby
 
-puts "hello"
 require_relative "../lib/sumo_sum"
 
-SumoSum.process
+require 'getoptlong'
+
+opts = GetoptLong.new(
+  ['--help','-h', GetoptLong::OPTIONAL_ARGUMENT],
+  ['--source_category','-s', GetoptLong::OPTIONAL_ARGUMENT],
+  ['--count','-c', GetoptLong::OPTIONAL_ARGUMENT],
+)
+
+source_category = "*"
+count           = 25
+
+opts.each do |opt,arg|
+  case opt
+  when '--help'
+    puts <<-EOF
+    usage: #{ __FILE__ } [--help or -h] [-c or --count <count>]
+           [-s or --source_category <category>]
+
+    Specify number of tests returned, with most visited first
+    Defaults to 25:
+
+    #{ __FILE__ } -c, --count integer:
+
+    specify a source category in the sumo query.
+    defaults to "*":
+
+    #{ __FILE__ } -s, --source_category [source_category]:
+
+    show help:
+    #{ __FILE__ } -h, --help
+
+    EOF
+    exit 0
+  when '--source_category'
+
+    source_category=arg
+
+  when '--count'
+    raise "count not an integer" unless arg[/[0-9]+/].size == arg.size
+    count = arg.to_i
+  end
+end
+
+SumoSum.process(source_category, count)
 
