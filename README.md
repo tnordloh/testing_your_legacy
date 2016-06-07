@@ -41,6 +41,8 @@ To run, just execute the command
 
 `tests_via_sumo [-c or --count <count>] [-s or --source_category <category>]`
 
+This defaults to a _source_category of `*` and a count of 25, and outputs the top 25 most-utilized urls to STDOUT, to give maximum flexibility in where to put the tests.
+
 #### Example 1:  Base url test
 
 ```ruby
