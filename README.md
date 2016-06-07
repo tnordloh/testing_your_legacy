@@ -41,7 +41,12 @@ To run, just execute the command
 
 `tests_via_sumo [-c or --count <count>] [-s or --source_category <category>]`
 
-This defaults to a _sourceCategory of `*` and a count of 25, and outputs the top 25 most-utilized urls to STDOUT, to give maximum flexibility in where to put the tests.
+source_category defaults to a `*` 
+count defaults to 25, and controls the number of tests generated.
+
+Results are generated on stdout, for maximum flexibility on where the tests are placed in the Rails application.
+
+Here are some examples on how to modify the generated templates, for your application.
 
 #### Example 1:  Base url test
 
