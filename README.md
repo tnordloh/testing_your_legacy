@@ -173,11 +173,15 @@ end
 
 We run it, it seems to work, so now we can add this line, to check for the profile link on the home page:
 
-    assert_select 'a[href=?]', "/user/profile/#{users(:good888).id}", {count: 1}
+```ruby
+assert_select 'a[href=?]', "/user/profile/#{users(:good888).id}", {count: 1}
+```
+
 
 Then do a little refactoring, to break login into a reusable method, and finalize this test:
 
 private login method:
+
 ```ruby
 def login(login, p)
   post '/user/login', user: { login: login , password: p }
@@ -209,10 +213,3 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/tnordl
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
-count defaults to 25, and controls the number of tests generated.
-
-Results are generated on stdout, for maximum flexibility on where the tests are placed in the Rails application.
-
-Here are some examples on how to modify the generated templates, for your application.
-
