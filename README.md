@@ -19,11 +19,16 @@ Or install it yourself as:
 ## Usage
 
 
-This gem should be used by people who have inherited a legacy application which lacks any tests, but has been running in production for a while.  It uses Sumo Logic to find the most frequently used urls in an application, and then generates tests for those urls.
+This gem should be used by people who have inherited a legacy application which lacks any tests, but has been running in production for a while.  It uses Sumo Logic, or a raw logfile, to find the most frequently used urls in an application, and then generates tests for those urls.
 
-To run, execute the command:
+to run against a log file, execute the command:
+
+`tests_via_raw_file [file_name]`
+
+To run using Sumo api, execute the command:
 
 `tests_via_sumo [-c or --count <count>] [-s or --source_category <category>]`
+
 
 source_category defaults to a * .
 
@@ -31,10 +36,6 @@ Count defaults to 25, and controls the number of tests generated.
 
 Results are generated on stdout, for maximum flexibility on where the tests are placed in the Rails application.
 
-
-## Caveats
-
-Since Sumo Logic is nice enough to process logs for free, for smaller users, I'm releasing this gem with heavy dependence on Sumo's query function, for now.  I plan on adding hooks to allow it to be more useful for processing logfiles without relying on Sumo for summing up the number of visits per page, ordering them from greatest to smallest, and parsing data out of the logfiles.
 
 ### Prerequisites
 

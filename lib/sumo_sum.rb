@@ -7,7 +7,16 @@ module SumoSum
     discovers = TestingYourLegacy::Discover.new(list)
 
     discovers.each do |r|
-      puts discovers.generate_method(r) + "\n"
+      puts discovers.generate_test(r) + "\n"
+    end
+  end
+
+  def self.process_file(file,count)
+    list=TestingYourLegacy::RawFile.new(file,count)
+    discovers = TestingYourLegacy::Discover.new(list)
+
+    discovers.each do |r|
+      puts discovers.generate_test(r) + "\n"
     end
 
   end

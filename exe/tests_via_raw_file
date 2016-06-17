@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/sumo_sum"
+require_relative "../lib/testing_your_legacy/raw_file.rb"
+
+
+
+SumoSum.process_file(File.open(ARGV[0]), 25)
+

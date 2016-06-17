@@ -1,38 +1,28 @@
+
 require 'minitest/autorun'
+require_relative '../lib/testing_your_legacy/testing_your_legacy'
 
-require_relative "../lib/testing_your_legacy/discover"
+describe TestingYourLegacy do
 
-describe TestingYourLegacy::Discover do
-
-  it "can get local repository status" do
-    one = {protocol: 'POST',
-           url: 'link/to',
-           visits: 6}
-    two = {protocol: 'GET',
-           url: 'link/two',
-           visits: 5}
-    log_stub = [ one, two]
-    logs = TestingYourLegacy::Discover.new(log_stub)
-    logs.each { |line|
-      line[:protocol].class.must_equal(String)
-    }
+  it "can create a log entry" do
+    l = TestingYourLegacy::LogEntry.new("/","GET",5)
+    l[:url].must_equal("/")
   end
 
-  it "can print a test from the template" do
-    logs = TestingYourLegacy::Discover.new(nil)
-    one = {protocol: 'POST',
-           url: 'link/to',
-           visits: 6}
-    logs.generate_test(one).class.must_equal(String)
+  it "can create a log summary" do
+    first= TestingYourLegacy::LogEntry.new("/","GET",5)
+    second= TestingYourLegacy::LogEntry.new("/user","GET",4)
+    values = [first, second]
+    list = TestingYourLegacy::LogSummary.new(values)
+    list.first["protocol"].must_equal("GET")
   end
 
-  it "can print a method from the template" do
-    logs = TestingYourLegacy::Discover.new(nil)
-    one = {protocol: 'POST',
-           url: 'link/to',
-           visits: 6}
-    logs.generate_method(one).class.must_equal(String)
+  it "can return logs in the correct order" do
+    first= TestingYourLegacy::LogEntry.new("/","GET",4)
+    second= TestingYourLegacy::LogEntry.new("/user","GET",5)
+    values = [first, second]
+    list = TestingYourLegacy::LogSummary.new(values)
+    list.first["visits"].must_equal(5)
   end
 
 end
-

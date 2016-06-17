@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    testing_your_legacy (0.1.2)
+    testing_your_legacy (0.1.4)
       sumo-search (~> 2.1)
 
 GEM
