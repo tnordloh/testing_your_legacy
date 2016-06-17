@@ -37,11 +37,15 @@ Count defaults to 25, and controls the number of tests generated.
 Results are generated on stdout, for maximum flexibility on where the tests are placed in the Rails application.
 
 
-### Prerequisites
+#### Prerequisites for reading a raw file ####
 
-Currently, this gem requires an active account with sumologic, and that you read your logfiles into sumologic.  It then uses their api to aggregate the results, and create tests, based on frequency.
+Copy the relevant production.log file to your local system for processing.
 
-After reading log files with Sumo, run the sumo_sum command.  It will prompt you to fill in the ~/.sumo_creds file, with your credentials, if you haven't already.  Otherwise, it should parse your sumo  logs, and return a list of tests to your command line, which you can pipe into a test file of your choise.
+### Prerequisites for sumo
+
+Install Sumo logic: [Sumo logic install instructions](https://www.sumologic.com/resource/featured-videos/installing-linux-collector-quickstart-tutorial/)
+
+After after setting up sumo logic, run the tests_via_sumo command.  It will prompt you to fill in the ~/.sumo_creds file, with your credentials, if you haven't already.  Otherwise, it should parse your sumo  logs, and return a list of tests to your command line, which you can pipe into a test file of your choise.
 
 All of the tests are initially set to `skip`, so that you can enable them one at a time. Start at the first test, which is the most-visited link, and try to run it.  It may need to have some prerequisites filled in; for example, perhaps it requires that the user be logged in, which may require you to create a relevant fixture, and ensure that a login url is called first.
 
